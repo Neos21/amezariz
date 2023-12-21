@@ -95,8 +95,10 @@ body {
 #wrapper > #main   > #main-inner  ,
 #wrapper > #footer > #footer-inner {
   max-width: 960px;
-  margin: 0 auto;
-  padding: 0 .75rem;
+  margin-right: auto;
+  margin-left : auto;
+  padding-right: .75rem;
+  padding-left : .75rem;
 }
 
 a {
@@ -150,6 +152,15 @@ a {
       padding-left: 1rem;
     }
 
+
+/* メイン
+ * ================================================== */
+
+#main-inner {
+  margin: 3rem 0;
+  border-top: 1px solid #999;
+  padding-top: 3rem;
+}
 
 /* フッタ
  * ================================================== */
