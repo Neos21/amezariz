@@ -137,8 +137,11 @@ a {
       text-decoration: underline overline;
     }
 
-/* ナビゲーション */
+/* ナビゲーション・罫線 */
 #header-nav {
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid #999;
+  padding-bottom: 2.5rem;
   text-align: center;
 }
 #header-nav ul {
@@ -156,25 +159,22 @@ a {
 /* メイン
  * ================================================== */
 
-#main-inner {
-  margin: 3rem 0;
-  border-top: 1px solid #999;
-  padding-top: 3rem;
-}
 
 /* フッタ
  * ================================================== */
 
+/* 画面下部のグラデーション帯 */
 #footer {
   border-bottom-width: 5px;
   border-bottom-style: solid;
   border-image: linear-gradient(to right, #20f, #e27) 1;
 }
 
+/* 罫線 */
 #copyright {
-  margin: 3rem 0;
+  margin: 2.5rem 0;
   border-top: 1px solid #999;
-  padding-top: 3rem;
+  padding-top: 2.5rem;
   color: #666;
   text-align: center;
 }
