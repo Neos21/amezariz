@@ -73,7 +73,7 @@ html {
   text-decoration-skip-ink: none;
   -webkit-text-decoration-skip: objects;
   line-height: 1.7;
-  background: #fff;
+  background: #fcfdfe;
   cursor: default;
 }
 
@@ -97,8 +97,8 @@ body {
   max-width: 960px;
   margin-right: auto;
   margin-left : auto;
-  padding-right: .75rem;
-  padding-left : .75rem;
+  padding-right: .8rem;
+  padding-left : .8rem;
 }
 
 a {
@@ -108,6 +108,10 @@ a {
   a:hover {
     text-decoration: none;
   }
+
+dt {
+  font-weight: bold;
+}
 
 
 /* ヘッダ
@@ -122,16 +126,14 @@ a {
 
 /* ブランド名 */
 #brand-name {
+  margin: 2.5rem 0;
   text-align: center;
 }
   #brand-name a {
-    display: block;
-    height: 5rem;
     color: #900;
     font-size: 1.5rem;
     font-weight: bold;
     text-decoration: none;
-    line-height: 5rem;
   }
     #brand-name a:hover {
       text-decoration: underline overline;
@@ -139,21 +141,21 @@ a {
 
 /* ナビゲーション・罫線 */
 #header-nav {
-  margin-bottom: 2.5rem;
+  margin: 2.5rem 0;
   border-bottom: 1px solid #999;
   padding-bottom: 2.5rem;
   text-align: center;
 }
-#header-nav ul {
-  padding: 0;
-  list-style: none;
-}
-  #header-nav li {
-    display: inline-block;
+  #header-nav ul {
+    padding: 0;
+    list-style: none;
   }
-    #header-nav li:not(:first-child) {
-      padding-left: 1rem;
+    #header-nav li {
+      display: inline-block;
     }
+      #header-nav li:not(:first-child) {
+        padding-left: 1rem;
+      }
 
 
 /* メイン
@@ -170,11 +172,20 @@ a {
   border-image: linear-gradient(to right, #20f, #e27) 1;
 }
 
-/* 罫線 */
-#copyright {
+/* ナビゲーション・罫線 */
+#footer-nav {
   margin: 2.5rem 0;
   border-top: 1px solid #999;
   padding-top: 2.5rem;
-  color: #666;
   text-align: center;
 }
+  #footer-nav ul {
+    padding: 0;
+    list-style: none;
+  }
+    #footer-nav li {
+      display: inline-block;
+    }
+      #footer-nav li:not(:first-child) {
+        padding-left: 1rem;
+      }
