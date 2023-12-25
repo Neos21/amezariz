@@ -7,4 +7,5 @@ __[Enter The WebSite](https://amezariz.netlify.app/)__
 
 - 本リポジトリの `docs/` 配下のファイルを更新する
     - `docs/` 配下は完全な静的ページとして機能するようになっている
-- Git Push すると、連携している Netlify が自動的にデプロイを行なってくれる
+    - Dev : `$ npx sirv-cli ./docs/ --host --dev`
+- Git Push すると、連携している Netlify へ自動的にデプロイされる
