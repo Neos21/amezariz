@@ -100,6 +100,15 @@ body {
   padding-right: .8rem;
   padding-left : .8rem;
 }
+  /* iPhone 横向き用 */
+  @media (orientation: landscape) {
+    #wrapper > #header > #header-inner,
+    #wrapper > #main   > #main-inner  ,
+    #wrapper > #footer > #footer-inner {
+      padding-right: calc(env(safe-area-inset-right));
+      padding-left : calc(env(safe-area-inset-left));
+    }
+  }
 
 a {
   color: #900;
