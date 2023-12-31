@@ -156,6 +156,7 @@ dt {
   text-align: center;
 }
   #header-nav ul {
+    margin: 0;
     padding: 0;
     list-style: none;
   }
@@ -169,6 +170,37 @@ dt {
 
 /* メイン
  * ================================================== */
+
+#main h1 {
+  margin-top: 0;
+  margin-bottom: 1.15rem;
+}
+
+#main h2 {
+  margin-top: 2em;
+  margin-bottom: 1.45rem;
+  border-bottom: 2px dashed #c33;
+}
+
+#main h3,
+#main h4 {
+  margin-top: 2em;
+  margin-bottom: 1.45rem;
+}
+
+#main p,
+#main ul,
+#main ol,
+#main dl,
+#main dd {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+}
+
+#main dt {
+  margin-top: 0;
+  margin-bottom: .25rem;
+}
 
 
 /* フッタ
@@ -189,6 +221,7 @@ dt {
   text-align: center;
 }
   #footer-nav ul {
+    margin: 0;
     padding: 0;
     list-style: none;
   }
