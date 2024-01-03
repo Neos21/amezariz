@@ -1,0 +1,13 @@
+{
+  "name": "Amezariz : なな子プロジェクト発アイドルプロジェクト「アメザリズ」公式サイト",
+  "short_name": "Amezariz",
+  "lang": "ja",
+  "theme_color": "#222",
+  "background_color": "#fcfdfe",
+  "display": "standalone",
+  "start_url": "https://amezariz.netlify.app/",
+  "icons": [
+    { "src": "manifest-icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "manifest-icon-512.png", "type": "image/png", "sizes": "512x512" }
+  ]
+}
