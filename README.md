@@ -1,4 +1,4 @@
-# Amezariz
+# Amezariz : アイドルプロジェクト「アメザリズ」
 
 __[Enter The WebSite](https://amezariz.netlify.app/)__
 
