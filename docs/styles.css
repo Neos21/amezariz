@@ -73,7 +73,7 @@ html {
   text-decoration-skip-ink: none;
   -webkit-text-decoration-skip: objects;
   line-height: 1.7;
-  background: #fcfdfe;
+  background: #fff;
   cursor: default;
 }
 
@@ -135,22 +135,24 @@ dt {
 
 /* ブランド名 */
 #brand-name {
-  margin: 2.5rem 0;
+  margin: 2rem 0;
   text-align: center;
 }
   #brand-name a {
-    color: #900;
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-decoration: none;
+    display: block;
+    height: 320px;
+    background: url("styles-brand-name.png") center/320px no-repeat;
   }
     #brand-name a:hover {
-      text-decoration: underline overline;
+      opacity: .85;
+    }
+    #brand-name a span {
+      display: none;
     }
 
 /* ナビゲーション・罫線 */
 #header-nav {
-  margin: 2.5rem 0;
+  margin: 2rem 0 2.5rem;
   border-bottom: 1px solid #999;
   padding-bottom: 2.5rem;
   text-align: center;
@@ -164,7 +166,7 @@ dt {
       display: inline-block;
     }
       #header-nav li:not(:first-child) {
-        padding-left: 1rem;
+        padding-left: .85rem;
       }
 
 
@@ -229,5 +231,10 @@ dt {
       display: inline-block;
     }
       #footer-nav li:not(:first-child) {
-        padding-left: 1rem;
+        padding-left: .85rem;
       }
+
+#footer-logo {
+  margin: 2.5rem 0;
+  text-align: center;
+}
