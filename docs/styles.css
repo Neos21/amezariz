@@ -140,8 +140,8 @@ dt {
 }
   #brand-name a {
     display: block;
-    height: 320px;
-    background: url("styles-brand-name.png") center/320px no-repeat;
+    height: 300px;
+    background: url("styles-brand-name.png") center/300px no-repeat;
   }
     #brand-name a:hover {
       opacity: .85;
