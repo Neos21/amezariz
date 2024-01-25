@@ -13,10 +13,7 @@
   src: local("Noto Sans CJK JP Regular"),
        local("NotoSansCJKjp-Regular"   ),
        local("Noto Sans CJK JP"        ),
-       local("NotoSansCJKjp"           ),
-       url("//fonts.gstatic.com/ea/notosansjp/v5/NotoSansJP-Regular.woff2") format("woff2"   ),
-       url("//fonts.gstatic.com/ea/notosansjp/v5/NotoSansJP-Regular.woff" ) format("woff"    ),
-       url("//fonts.gstatic.com/ea/notosansjp/v5/NotoSansJP-Regular.otf"  ) format("opentype");
+       local("NotoSansCJKjp"           );
 }
 @font-face {
   font-family: "Noto Sans CJK JP";
@@ -25,10 +22,7 @@
   src: local("Noto Sans CJK JP Bold"),
        local("NotoSansCJKjp-Bold"   ),
        local("Noto Sans CJK JP"     ),
-       local("NotoSansCJKjp"        ),
-       url("//fonts.gstatic.com/ea/notosansjp/v5/NotoSansJP-Bold.woff2") format("woff2"   ),
-       url("//fonts.gstatic.com/ea/notosansjp/v5/NotoSansJP-Bold.woff" ) format("woff"    ),
-       url("//fonts.gstatic.com/ea/notosansjp/v5/NotoSansJP-Bold.otf"  ) format("opentype");
+       local("NotoSansCJKjp"        );
 }
 @font-face {
   font-family: "Yu Gothic";
@@ -42,25 +36,6 @@
   font-weight: bold;
   src: local("Yu Gothic Bold"),
        local("YuGothic-Bold" );
-}
-@font-face {
-  font-family: "Noto Sans Mono CJK JP";
-  font-display: swap;
-  src: local("Noto Sans Mono CJK JP Regular"),
-       local("NotoSansMonoCJKjp-Regular"    ),
-       local("Noto Sans Mono CJK JP"        ),
-       local("NotoSansMonoCJKjp"            ),
-       url("//cdn.jsdelivr.net/npm/@japanese-monospaced-fonts/noto-sans-mono-cjk-jp@1.0.1/NotoSansMonoCJKJP-Regular.otf") format("opentype");
-}
-@font-face {
-  font-family: "Noto Sans Mono CJK JP";
-  font-display: swap;
-  font-weight: bold;
-  src: local("Noto Sans Mono CJK JP Bold"),
-       local("NotoSansMonoCJKjp-Bold"    ),
-       local("Noto Sans Mono CJK JP"     ),
-       local("NotoSansMonoCJKjp"         ),
-       url("//cdn.jsdelivr.net/npm/@japanese-monospaced-fonts/noto-sans-mono-cjk-jp@1.0.1/NotoSansMonoCJKJP-Bold.otf") format("opentype");
 }
 
 html {
@@ -135,17 +110,12 @@ dt {
 
 /* ブランド名 */
 #brand-name {
-  margin: 2rem 0;
+  margin: 1rem 0 2rem;
   text-align: center;
 }
-  #brand-name a {
-    display: block;
-    height: 300px;
-    background: url("styles-brand-name.png") center/300px no-repeat;
+  #brand-name a:hover {
+    opacity: .85;
   }
-    #brand-name a:hover {
-      opacity: .85;
-    }
     #brand-name a span {
       display: none;
     }
