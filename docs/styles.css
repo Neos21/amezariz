@@ -136,7 +136,7 @@ dt {
       display: inline-block;
     }
       #header-nav li:not(:first-child) {
-        padding-left: .85rem;
+        padding-left: .75rem;
       }
 
 
@@ -201,7 +201,7 @@ dt {
       display: inline-block;
     }
       #footer-nav li:not(:first-child) {
-        padding-left: .85rem;
+        padding-left: .75rem;
       }
 
 #footer-logo {
