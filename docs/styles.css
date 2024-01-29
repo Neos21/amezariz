@@ -136,7 +136,7 @@ dt {
       display: inline-block;
     }
       #header-nav li:not(:first-child) {
-        padding-left: .75rem;
+        padding-left: .7rem;
       }
 
 
@@ -201,10 +201,20 @@ dt {
       display: inline-block;
     }
       #footer-nav li:not(:first-child) {
-        padding-left: .75rem;
+        padding-left: .7rem;
       }
 
 #footer-logo {
   margin: 2.5rem 0;
+  font-size: 0;
   text-align: center;
 }
+  #footer-logo img {
+    margin: 0 .35rem;
+  }
+    #footer-logo img:first-child {
+      margin-left: 0;
+    }
+    #footer-logo img:last-child {
+      margin-right: 0;
+    }
