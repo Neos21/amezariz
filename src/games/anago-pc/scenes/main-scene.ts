@@ -29,6 +29,8 @@ export default class MainScene extends Phaser.Scene {
   private startButtonHard!: Button;
   /** スタートボタン (Zarigani レベル) */
   private startButtonZarigani!: Button;
+  /** ランキング画面に遷移するボタン */
+  private rankingButton!: Button;
   /** プレイ中のレベル表示 */
   private selectedLevel!: Phaser.GameObjects.Text;
   
@@ -90,7 +92,7 @@ export default class MainScene extends Phaser.Scene {
       States.gameLevel = GameLevel.ZARIGANI;
       this.isStartGame = true;
     });
-    new Button(this, Constants.width - 80, 20, 'Rank', () => {
+    this.rankingButton = new Button(this, Constants.width - 80, 20, 'Rank', () => {
       this.scene.start('RankingScene');
     });
     // レベル表示のテキストオブジェクトを配置しておく
@@ -124,6 +126,7 @@ export default class MainScene extends Phaser.Scene {
         this.startButtonEasy.text.setVisible(false);
         this.startButtonHard.text.setVisible(false);
         this.startButtonZarigani.text.setVisible(false);
+        this.rankingButton.text.setVisible(false);
         this.selectedLevel.setText(States.gameLevel);
         
         this.sound.play(`sound-${MainScene.keyNameGameStart}`, { volume: 0.5 });
@@ -147,6 +150,7 @@ export default class MainScene extends Phaser.Scene {
           this.startButtonEasy.text.setVisible(true).depth = 1000;
           this.startButtonHard.text.setVisible(true).depth = 1000;
           this.startButtonZarigani.text.setVisible(true).depth = 1000;
+          this.rankingButton.text.setVisible(true).depth = 1000;
           
           this.sound.play(`sound-${MainScene.keyNameGameOver}`, { volume: 0.5 });
           States.gameState = GameState.GAME_OVER;
