@@ -29,6 +29,8 @@ export default class MainScene extends Phaser.Scene {
   private startButtonHard!: Button;
   /** スタートボタン (Zarigani レベル) */
   private startButtonZarigani!: Button;
+  /** ランキング画面に遷移するボタン */
+  private rankingButton!: Button;
   /** プレイ中のレベル表示 */
   private selectedLevel!: Phaser.GameObjects.Text;
   
@@ -43,6 +45,10 @@ export default class MainScene extends Phaser.Scene {
   private itemsObject!: ItemsObject;
   /** プレイヤー */
   private player!: PlayerObject;
+  
+  constructor() {
+    super({ key: 'MainScene', active: true });  // シーン定義・自動実行する (`active`)
+  }
   
   /** プリロード */
   public preload(): void {
@@ -66,11 +72,11 @@ export default class MainScene extends Phaser.Scene {
   public create(): void {
     // 背景 (横スクロールさせる) を配置する
     this.background = this.add.tileSprite(0, 0, Constants.width, Constants.fieldHeight, MainScene.keyNameBackground).setOrigin(0, 0);
-    // ステータスバーを配置する (`refreshBody()` で `setOrigin()` による当たり判定のズレを修正する)
+    // ステータスバーを配置する
     this.add.rectangle(0, Constants.fieldHeight, Constants.width, Constants.height - Constants.fieldHeight, 0x3f48cc).setOrigin(0, 0).depth = 2000;  // ステータスバーのベースの重なり度にする
     
     // 初期状態のテキストを表示する (`setOrigin()` で中央揃えになるようにする)
-    this.message = this.add.text(Constants.width / 2, Constants.fieldHeight / 2 - 90, 'レベルを選択してスタート', { color: '#f09', fontSize: 30, fontFamily: 'sans-serif', backgroundColor: '#f0f0f0', align: 'center' })
+    this.message = this.add.text(Constants.width / 2, Constants.fieldHeight / 2 - 90, 'レベルを選択してスタート', { color: '#f09', fontSize: 30, fontFamily: 'sans-serif', backgroundColor: '#f6f6f6', align: 'center' })
       .setPadding(10, 10, 10, 10)
       .setOrigin(0.5, 0);
     // レベル別スタートボタンを配置する
@@ -86,9 +92,11 @@ export default class MainScene extends Phaser.Scene {
       States.gameLevel = GameLevel.ZARIGANI;
       this.isStartGame = true;
     });
+    this.rankingButton = new Button(this, Constants.width - 80, 20, 'Rank', () => {
+      this.scene.start('RankingScene');
+    });
     // レベル表示のテキストオブジェクトを配置しておく
-    this.selectedLevel = this.add.text(Constants.width / 2, Constants.statusBarTextY, 'Level', { color: '#fff', fontSize: 30, fontFamily: 'sans-serif', align: 'center' })
-      .setOrigin(0.5, 0);
+    this.selectedLevel = this.add.text(Constants.width / 2, Constants.statusBarTextY, 'Level', { color: '#fff', fontSize: 30, fontFamily: 'sans-serif', align: 'center' }).setOrigin(0.5, 0);
     this.selectedLevel.depth = 2500;
     
     this.hpObject = new HpObject(this);        // HP 表示

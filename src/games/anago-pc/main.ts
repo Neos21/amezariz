@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 
 import Constants from './constants';
 import MainScene from './scenes/main-scene';
+import RankingScene from './scenes/ranking-scene';
 
 // TODO: スマホ用にサイズなどを変更したい場合はココで定数を差し替えてからゲームを起動する (type="module" なので DOMContentLoaded タイミングで実行される)
 //if(window.innerWidth < 600) Constants.width = 300;
@@ -25,7 +26,7 @@ const config: Phaser.Types.Core.GameConfig = {
       debug: false  // `true` にするとデバッグ用の枠が出る
     }
   },
-  scene: [MainScene]
+  scene: [MainScene, RankingScene]
 };
 
 // ゲーム開始

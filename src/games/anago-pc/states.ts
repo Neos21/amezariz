@@ -2,7 +2,7 @@
 export const GameState = {
   PLAY     : 'PLAY',
   GAME_OVER: 'GAME_OVER'
-}
+};
 export type GameStateType = typeof GameState[keyof typeof GameState];
 
 /** ゲームの難易度 */

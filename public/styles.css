@@ -110,7 +110,7 @@ dt {
 
 /* ブランド名 */
 #brand-name {
-  margin: 1rem 0 2rem;
+  margin: .5rem 0 1.5rem;
   text-align: center;
 }
   #brand-name a:hover {
@@ -122,7 +122,7 @@ dt {
 
 /* ナビゲーション・罫線 */
 #header-nav {
-  margin: 2rem 0 2.5rem;
+  margin: 1.5rem 0 2.5rem;
   border-bottom: 1px solid #999;
   padding-bottom: 2.5rem;
   text-align: center;
