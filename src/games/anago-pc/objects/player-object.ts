@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 
 import Constants from '../constants';
-import { State } from '../scenes/main-scene';
+import States, { GameState, GameLevel } from '../states';
 import ItemObject from './item-object';
 
 /** プレイヤーオブジェクト */
@@ -26,19 +26,19 @@ export default class PlayerObject extends Phaser.Physics.Arcade.Sprite {
   }
   
   /** プレイヤーをマウスに追従させる */
-  public onPointerMove(pointer: Phaser.Input.Pointer, state: State, currentHp: number): void {
-    if(state === 'PLAY') {
+  public onPointerMove(pointer: Phaser.Input.Pointer, currentHp: number): void {
+    if(States.gameState === GameState.PLAY) {
       if(currentHp <= 0) return;  // HP が 0 になったら Tween を受け付けなくする
       
       this.scene.tweens.add({
         targets: this,
         x: pointer.x,
         y: Math.min(pointer.y, PlayerObject.playerMaxY),
-        duration: 400,  // カーソルへの追従速度
+        duration: States.gameLevel === GameLevel.EASY ? 200 : 400,  // カーソルへの追従速度
         ease: 'Sine.easeOut'
       });
     }
-    else if(state === 'GAME_OVER') {
+    else if(States.gameState === GameState.GAME_OVER) {
       if(this.scene.tweens.getTweens().length > 0) this.scene.tweens.killTweensOf(this);  // Tween の残りを殺すことで即時停止させる
     }
   }

@@ -3,6 +3,9 @@ import Phaser from 'phaser';
 import Constants from './constants';
 import MainScene from './scenes/main-scene';
 
+// TODO: スマホ用にサイズなどを変更したい場合はココで定数を差し替えてからゲームを起動する (type="module" なので DOMContentLoaded タイミングで実行される)
+//if(window.innerWidth < 600) Constants.width = 300;
+
 /** ゲーム設定 */
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,  // デフォルトは WebGL・うまく動作しない場合は Canvas にフォールバックする

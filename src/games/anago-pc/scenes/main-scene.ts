@@ -1,21 +1,18 @@
 import Phaser from 'phaser';
 
 import Constants from '../constants';
+import States, { GameLevel, GameState } from '../states';
 import HpObject from '../objects/hp-object';
 import ScoreObject from '../objects/score-object';
 import ItemsObject from '../objects/items-object';
 import ItemObject from '../objects/item-object';
 import PlayerObject from '../objects/player-object';
-
-/** ゲームの状態定義 */
-export type State = 'PLAY' | 'GAME_OVER';
+import Button from '../objects/button-object';
 
 /** メインシーン */
 export default class MainScene extends Phaser.Scene {
   /** 背景テクスチャのキー名 */
   private static readonly keyNameBackground: string = 'background';
-  /** ステータスバーテクスチャのキー名 */
-  private static readonly keyNameStatusBar: string = 'status-bar';
   /** ゲームスタートサウンドのキー名 */
   private static readonly keyNameGameStart: string = 'game-start';
   /** ゲームオーバーサウンドのキー名 */
@@ -23,8 +20,20 @@ export default class MainScene extends Phaser.Scene {
   
   /** 背景スプライト (横スクロールできるようにする) */
   private background!: Phaser.GameObjects.TileSprite;
+  
   /** メッセージ */
   private message!: Phaser.GameObjects.Text;
+  /** スタートボタン (Easy レベル) */
+  private startButtonEasy!: Button;
+  /** スタートボタン (Hard レベル) */
+  private startButtonHard!: Button;
+  /** スタートボタン (Zarigani レベル) */
+  private startButtonZarigani!: Button;
+  /** プレイ中のレベル表示 */
+  private selectedLevel!: Phaser.GameObjects.Text;
+  
+  /** ボタン押下時に一瞬 `true` とすることでゲームを開始させる */
+  private isStartGame: boolean = false;
   
   /** HP オブジェクト */
   private hpObject!: HpObject;
@@ -35,15 +44,9 @@ export default class MainScene extends Phaser.Scene {
   /** プレイヤー */
   private player!: PlayerObject;
   
-  /** スペースキー */
-  private spaceKey!: Phaser.Input.Keyboard.Key;
-  /** ゲームの状態 */
-  private state: State = 'GAME_OVER';
-  
   /** プリロード */
   public preload(): void {
     this.load.image(MainScene.keyNameBackground, `/games/anago/${MainScene.keyNameBackground}.png`);
-    this.load.image(MainScene.keyNameStatusBar , `/games/anago/${MainScene.keyNameStatusBar}.png`);
     this.load.image(PlayerObject.keyName       , `/games/anago/${PlayerObject.keyName}.png`);
     this.load.image(ItemObject.keyNameSora     , `/games/anago/${ItemObject.keyNameSora}.png`);
     this.load.image(ItemObject.keyNameEri      , `/games/anago/${ItemObject.keyNameEri}.png`);
@@ -64,10 +67,29 @@ export default class MainScene extends Phaser.Scene {
     // 背景 (横スクロールさせる) を配置する
     this.background = this.add.tileSprite(0, 0, Constants.width, Constants.fieldHeight, MainScene.keyNameBackground).setOrigin(0, 0);
     // ステータスバーを配置する (`refreshBody()` で `setOrigin()` による当たり判定のズレを修正する)
-    this.add.rectangle(0, Constants.fieldHeight, Constants.width, Constants.height - Constants.fieldHeight, 0x3f48cc).setOrigin(0, 0);
-    //this.physics.add.staticImage(0, Constants.fieldHeight, MainScene.keyNameStatusBar).setOrigin(0, 0).refreshBody();
+    this.add.rectangle(0, Constants.fieldHeight, Constants.width, Constants.height - Constants.fieldHeight, 0x3f48cc).setOrigin(0, 0).depth = 2000;  // ステータスバーのベースの重なり度にする
+    
     // 初期状態のテキストを表示する (`setOrigin()` で中央揃えになるようにする)
-    this.message = this.add.text(Constants.width / 2, Constants.fieldHeight / 2, 'スペースキーでスタート', { color: '#f09', fontSize: 30, fontFamily: 'sans-serif', backgroundColor: '#fff', align: 'center' }).setOrigin(0.5, 0);
+    this.message = this.add.text(Constants.width / 2, Constants.fieldHeight / 2 - 90, 'レベルを選択してスタート', { color: '#f09', fontSize: 30, fontFamily: 'sans-serif', backgroundColor: '#f0f0f0', align: 'center' })
+      .setPadding(10, 10, 10, 10)
+      .setOrigin(0.5, 0);
+    // レベル別スタートボタンを配置する
+    this.startButtonEasy = new Button(this, Constants.width / 4, Constants.fieldHeight / 2 + 30, 'Easy', () => {
+      States.gameLevel = GameLevel.EASY;
+      this.isStartGame = true;
+    });
+    this.startButtonHard = new Button(this, Constants.width / 4 * 2, Constants.fieldHeight / 2 + 30, 'Hard', () => {
+      States.gameLevel = GameLevel.HARD;
+      this.isStartGame = true;
+    });
+    this.startButtonZarigani = new Button(this, Constants.width / 4 * 3, Constants.fieldHeight / 2 + 30, 'Zarigani', () => {
+      States.gameLevel = GameLevel.ZARIGANI;
+      this.isStartGame = true;
+    });
+    // レベル表示のテキストオブジェクトを配置しておく
+    this.selectedLevel = this.add.text(Constants.width / 2, Constants.statusBarTextY, 'Level', { color: '#fff', fontSize: 30, fontFamily: 'sans-serif', align: 'center' })
+      .setOrigin(0.5, 0);
+    this.selectedLevel.depth = 2500;
     
     this.hpObject = new HpObject(this);        // HP 表示
     this.scoreObject = new ScoreObject(this);  // スコア表示
@@ -75,29 +97,34 @@ export default class MainScene extends Phaser.Scene {
     this.player = new PlayerObject(this, 50, Constants.fieldHeight / 2);  // プレイヤーを用意する
     
     // プレイヤーをカーソルに追従させる処理
-    this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => this.player.onPointerMove(pointer, this.state, this.hpObject.hp));
+    this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => this.player.onPointerMove(pointer, this.hpObject.hp));
     // プレイヤーとアイテムが重なった時の処理
     this.physics.add.overlap(this.player, this.itemsObject.items, (player, item) => this.onCollectItem(player as PlayerObject, item as ItemObject), undefined, this);
-    // スペースキーの押下をチェックする
-    this.spaceKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     // カーソルを調整する
     this.input.setDefaultCursor('crosshair');
   }
   
   /** メインループ */
   public update(): void {
-    if(this.state === 'GAME_OVER') {
-      if(this.spaceKey.isDown) {  // スペースキーで開始する
+    if(States.gameState === GameState.GAME_OVER) {
+      if(this.isStartGame) {  // ゲーム開始の合図が出たらゲーム開始
+        this.isStartGame = false;  // フラグは戻しておく
+        
         this.hpObject.createTimerEvent();     // HP 監視を開始する
         this.scoreObject.createTimerEvent();  // スコア計測を開始する
         this.itemsObject.createTimerEvent();  // アイテム群の初期化・タイマー処理を開始する
         
+        this.message.setVisible(false).setText('Game Over\nレベルを選択してリトライ');  // 各種ボタンを非表示にする
+        this.startButtonEasy.text.setVisible(false);
+        this.startButtonHard.text.setVisible(false);
+        this.startButtonZarigani.text.setVisible(false);
+        this.selectedLevel.setText(States.gameLevel);
+        
         this.sound.play(`sound-${MainScene.keyNameGameStart}`, { volume: 0.5 });
-        this.message.setVisible(false).setText('Game Over\nスペースキーでリトライ');  // メッセージを非表示にしつつ2回目以降のメッセージを設定しておく
-        this.state = 'PLAY';
+        States.gameState = GameState.PLAY;
       }
     }
-    else if(this.state === 'PLAY') {
+    else if(States.gameState === GameState.PLAY) {
       this.background.tilePositionX += 10;  // 背景を横スクロールさせる
       
       if(this.hpObject.hp <= 0) {  // HP が 0 になったらプレイヤー落下開始
@@ -110,9 +137,13 @@ export default class MainScene extends Phaser.Scene {
           this.scoreObject.removeTimerEvent();  // スコアタイマーを停止する
           this.itemsObject.removeTimerEvent();  // アイテムを止める
           
+          this.message.setVisible(true).depth = 1000;  // 各種ボタンを再表示にし最前面に配置する
+          this.startButtonEasy.text.setVisible(true).depth = 1000;
+          this.startButtonHard.text.setVisible(true).depth = 1000;
+          this.startButtonZarigani.text.setVisible(true).depth = 1000;
+          
           this.sound.play(`sound-${MainScene.keyNameGameOver}`, { volume: 0.5 });
-          this.message.setVisible(true).depth = 100;  // 重なり順を一番上にするための指定 (値はテキトーだがコレで最前面表示にできているのでよしとする)
-          this.state = 'GAME_OVER';
+          States.gameState = GameState.GAME_OVER;
         }
       }
       else {

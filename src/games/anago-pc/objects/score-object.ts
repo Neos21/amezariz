@@ -21,11 +21,12 @@ export default class ScoreObject {
   constructor(scene: Phaser.Scene) {
     this.scene = scene;
     // 「Score :」の固定文言・一度書いたら二度と動かさない
-    this.scene.add.text(20, Constants.statusBarTextY, 'Score :', this.textStyle);
+    this.scene.add.text(20, Constants.statusBarTextY, 'Score :', this.textStyle).depth = 2500;
     // 初期値を与える
     this.score = 0;
     // スコア表示
     this.scoreText = this.scene.add.text(250, Constants.statusBarTextY, String(this.score), this.textStyle).setOrigin(1, 0);  // 右揃え
+    this.scoreText.depth = 2500;
   }
   
   /** ゲームスタート時のタイマーを設定する */

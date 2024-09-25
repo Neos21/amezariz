@@ -23,11 +23,12 @@ export default class HpObject {
   constructor(scene: Phaser.Scene) {
     this.scene = scene;
     // 「HP :」の固定文言・一度書いたら二度と動かさない
-    this.scene.add.text(760, Constants.statusBarTextY, 'HP :', this.textStyle);
+    this.scene.add.text(760, Constants.statusBarTextY, 'HP :', this.textStyle).depth = 2500;  // ステータスバーの重なり度より上げる
     // 初期値を与える
     this.hp = 0;
     // HP 表示
     this.hpText = this.scene.add.text(920, Constants.statusBarTextY, String(this.hp), this.textStyle).setOrigin(1, 0);  // 右揃え
+    this.hpText.depth = 2500;
   }
   
   /** ゲームスタート時のタイマーを設定する */

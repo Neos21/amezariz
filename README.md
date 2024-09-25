@@ -5,9 +5,8 @@
 __[Enter The WebSite](https://amezariz.netlify.app/)__
 
 
-## デプロイ方法
-
-- 本リポジトリの `docs/` 配下のファイルを更新する
-    - `docs/` 配下は完全な静的ページとして機能するようになっている
-    - Dev : `$ npx sirv-cli ./docs/ --host --dev`
+- ローカル開発では `$ npm run local-dev` を用いる
+    - `netlify.toml` の設定に従い `$ npm run dev` を実行・ラップした開発用サーバが起動する
+- ビルド後のサイト確認は `$ npm run serve` を用いる
+    - `netlify.toml` の設定に従い `$ npm run build` が行われ、Netlify Functions 部分をラップしたローカルサーバが起動する
 - Git Push すると、連携している Netlify へ自動的にデプロイされる

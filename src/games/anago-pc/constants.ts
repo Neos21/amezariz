@@ -1,4 +1,4 @@
-const constants = {
+const Constants = {
   // ゲーム領域のサイズ
   width : 960,
   height: 570,
@@ -18,4 +18,4 @@ const constants = {
   itemHeight: 50
 };
 
-export default constants;
+export default Constants;
