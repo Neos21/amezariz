@@ -1,0 +1,13 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "api"
+
+# Functions 用のリダイレクト設定 https://www.jamesqquick.com/blog/how-to-redirect-netlify-functions-to-a-simpler-path/
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[dev]
+  command = "npm run dev"

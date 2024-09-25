@@ -11,11 +11,35 @@
     <!-- Google AdSense tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7BMK2EZNSB"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-7BMK2EZNSB')</script>
-    <title>Music - Amezariz : アイドルプロジェクト「アメザリズ」公式サイト</title>
+    <title>Videos - Amezariz : アイドルプロジェクト「アメザリズ」公式サイト</title>
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="styles.css">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="manifest" href="manifest.webmanifest">
+    <style>
+
+.iframe-responsive {  /* YouTube などの iframe をアスペクト比を保ってリサイズするためのラッパー・div 要素 */
+  position: relative;
+  width: 100%;
+  max-width: 560px;  /* デフォルト値 560px は YouTube の 16:9 動画のピクセルサイズ */
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+}
+  .iframe-responsive::before {
+    content: "";
+    display: block;
+    width: 100%;
+    padding-top: calc(315 / 560 * 100%);  /* デフォルト値は YouTube の 16:9 動画のサイズ (560x315 px)。変更する際は calc(height / width * 100%) と指定する */
+  }
+  .iframe-responsive iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+    </style>
   </head>
   <body>
 
@@ -34,8 +58,9 @@
           <li><a href="https://amezariz.hatenablog.com/">Blog</a></li>
           <li><a href="news.html">News</a></li>
           <li><a href="talent.html">Talent</a></li>
-          <li>Music</li>
+          <li><a href="music.html">Music</a></li>
           <li><a href="videos.html">Videos</a></li>
+          <li><a href="games.html">Games</a></li>
         </ul>
       </nav>
     </div>
@@ -43,20 +68,22 @@
   <main id="main">
     <div id="main-inner">
 
-<h1>Music</h1>
+<h1>Videos</h1>
 
-<h2 id="zariganyonz-ddd">2024-04-18 : ザリガニョンズ - DEATH！DEATH！です。</h2>
-<p>アメザリズが作った初めてのアイドル「ザリガニョンズ」のデビュー曲 Death！</p>
-<ul>
-  <li><a href="https://amezariz.bandcamp.com/album/death-death">Bandcamp : ザリガニョンズ - DEATH！DEATH！です。</a></li>
-</ul>
-<ol>
-  <li>DEATH！DEATH！です。</li>
-  <li>DEATH！DEATH！です。 (みどり∞ Only Version)</li>
-  <li>DEATH！DEATH！です。 (Instrumental Version)</li>
-  <li>DEATH！DEATH！です。 (みどり∞ Only Demo Version)</li>
-  <li>DEATH！DEATH！です。 (Cha-cha Version)</li>
-</ol>
+<h2 id="ddd-midori">2024-04-18 : <a href="https://www.youtube.com/watch?v=hjMUDBLbuSA">ザリガニョンズ - DEATH！DEATH！です。 (みどり∞オンリー Version)</a></h2>
+<div class="iframe-responsive">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/hjMUDBLbuSA?si=DZr1t9wc0A-dua3-" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<h2 id="ddd">2024-04-18 : <a href="https://www.youtube.com/watch?v=c0xSwSO2m3M">ザリガニョンズ - DEATH！DEATH！です。</a></h2>
+<div class="iframe-responsive">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/c0xSwSO2m3M?si=MRqJv3SnSnr8NtD8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<h2 id="trailer">2024-01-03 : <a href="https://www.youtube.com/watch?v=vdt44981Gt0">Amezariz … そして伝説へ</a></h2>
+<div class="iframe-responsive">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/vdt44981Gt0?si=JhgURpbarkboc-N8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>
 
     </div>
   </main>
