@@ -29,8 +29,6 @@ export default class MainScene extends Phaser.Scene {
   private startButtonHard!: Button;
   /** スタートボタン (Zarigani レベル) */
   private startButtonZarigani!: Button;
-  /** ランキング画面に遷移するボタン */
-  private rankingButton!: Button;
   /** プレイ中のレベル表示 */
   private selectedLevel!: Phaser.GameObjects.Text;
   
@@ -92,7 +90,7 @@ export default class MainScene extends Phaser.Scene {
       States.gameLevel = GameLevel.ZARIGANI;
       this.isStartGame = true;
     });
-    this.rankingButton = new Button(this, Constants.width - 80, 20, 'Rank', () => {
+    new Button(this, Constants.width - 80, 20, 'Rank', () => {
       this.scene.start('RankingScene');
     });
     // レベル表示のテキストオブジェクトを配置しておく
