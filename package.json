@@ -1,0 +1,39 @@
+{
+  "name": "amezariz",
+  "description": "Amezariz",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc && vite build",
+    "serve": "netlify serve",
+    
+    "dev"      : "vite --host",
+    "local-dev": "netlify dev",
+    
+    "netlify": "netlify"
+  },
+  "author": "Neo <neos21@gmail.com> (https://neos21.net/)",
+  "license": "MIT",
+  "homepage": "https://github.com/Neos21/practice-phaser-ts#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Neos21/practice-phaser-ts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Neos21/practice-phaser-ts/issues"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/Neos21"
+  },
+  "dependencies": {
+    "@netlify/functions": "2.8.1",
+    "phaser": "3.85.2"
+  },
+  "devDependencies": {
+    "@types/node": "22.7.0",
+    "netlify-cli": "17.36.2",
+    "typescript": "5.6.2",
+    "vite": "5.4.7"
+  }
+}
