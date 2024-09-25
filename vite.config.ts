@@ -13,7 +13,7 @@ export default defineConfig({
     target: 'esnext',  // Top-Level await を許可する
     rollupOptions: {  // エントリポイント別に HTML ファイルを指定する
       input: {
-        'game': path.resolve(__dirname, 'src/game/index.html')
+        'games/anago-pc': path.resolve(__dirname, 'src/games/anago-pc/index.html')
       }
     }
   }
