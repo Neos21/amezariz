@@ -22,6 +22,9 @@ export default class HighScoreObject extends Phaser.GameObjects.Container {
   /** ランキング更新により削除する ID */
   private deleteId: number | null = null;
   
+  /** 登録ボタンの二度押し防止用 */
+  private isClicked: boolean = false;
+  
   constructor(scene: Phaser.Scene) {
     super(scene, 0, 0);
     this.scene = scene;
@@ -60,6 +63,9 @@ export default class HighScoreObject extends Phaser.GameObjects.Container {
     
     // 登録ボタン
     this.registerButton = new Button(this.scene, Constants.width / 2, Constants.fieldHeight / 2 + 50, '登録', () => {
+      if(this.isClicked) return console.log('二度押し防止');
+      this.isClicked = true;
+      
       const device    = States.gameDevice.toLowerCase();  // DB 格納値に合わせる
       const level     = States.gameLevel.toLowerCase();   // DB 格納値に合わせる
       const score     = this.score;
@@ -76,6 +82,7 @@ export default class HighScoreObject extends Phaser.GameObjects.Container {
           this.score = this.deleteId = null;  // ハイスコア登録用の情報を削除しておく
           this.hide();  // このダイアログを隠す
           (this.scene as MainScene).showDefaultGameOverDialog();  // ゲームオーバー画面を出す
+          this.isClicked = false;  // フラグを戻しておく
         })
         .catch(error => {
           console.error('[HighScoreObject] Failed To Update Score', error);
@@ -83,6 +90,7 @@ export default class HighScoreObject extends Phaser.GameObjects.Container {
           this.score = this.deleteId = null;  // ハイスコア登録用の情報を削除しておく
           this.hide();  // このダイアログを隠す
           (this.scene as MainScene).showDefaultGameOverDialog();  // ゲームオーバー画面を出す
+          this.isClicked = false;  // フラグを戻しておく
         });
     });
     this.registerButton.text.depth = 3050;
