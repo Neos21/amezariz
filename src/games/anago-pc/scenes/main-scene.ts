@@ -1,13 +1,15 @@
 import Phaser from 'phaser';
 
 import Constants from '../constants';
-import States, { GameLevel, GameState } from '../states';
+import States, { GameDevice, GameLevel, GameState, getStateNameFromGameLevel } from '../states';
 import HpObject from '../objects/hp-object';
 import ScoreObject from '../objects/score-object';
 import ItemsObject from '../objects/items-object';
 import ItemObject from '../objects/item-object';
 import PlayerObject from '../objects/player-object';
 import Button from '../objects/button-object';
+import { fetchRanking, Ranking } from '../ranking';
+import HighScoreObject from '../objects/high-score-object';
 
 /** メインシーン */
 export default class MainScene extends Phaser.Scene {
@@ -45,6 +47,8 @@ export default class MainScene extends Phaser.Scene {
   private itemsObject!: ItemsObject;
   /** プレイヤー */
   private player!: PlayerObject;
+  /** ハイスコアオブジェクト */
+  private highScoreObject!: HighScoreObject;
   
   constructor() {
     super({ key: 'MainScene', active: true });  // シーン定義・自動実行する (`active`)
@@ -78,31 +82,35 @@ export default class MainScene extends Phaser.Scene {
     // 初期状態のテキストを表示する (`setOrigin()` で中央揃えになるようにする)
     this.message = this.add.text(Constants.width / 2, Constants.fieldHeight / 2 - 90, 'レベルを選択してスタート', { color: '#f09', fontSize: 30, fontFamily: 'sans-serif', backgroundColor: '#f6f6f6', align: 'center' })
       .setPadding(10, 10, 10, 10)
-      .setOrigin(0.5, 0);
+      .setOrigin(.5, 0);
     // レベル別スタートボタンを配置する
     this.startButtonEasy = new Button(this, Constants.width / 4, Constants.fieldHeight / 2 + 30, 'Easy', () => {
-      States.gameLevel = GameLevel.EASY;
-      this.isStartGame = true;
+      States.gameDevice = GameDevice.PC;
+      States.gameLevel  = GameLevel.PC_EASY;
+      this.isStartGame  = true;
     });
     this.startButtonHard = new Button(this, Constants.width / 4 * 2, Constants.fieldHeight / 2 + 30, 'Hard', () => {
-      States.gameLevel = GameLevel.HARD;
-      this.isStartGame = true;
+      States.gameDevice = GameDevice.PC;
+      States.gameLevel  = GameLevel.PC_HARD;
+      this.isStartGame  = true;
     });
     this.startButtonZarigani = new Button(this, Constants.width / 4 * 3, Constants.fieldHeight / 2 + 30, 'Zarigani', () => {
-      States.gameLevel = GameLevel.ZARIGANI;
-      this.isStartGame = true;
+      States.gameDevice = GameDevice.PC;
+      States.gameLevel  = GameLevel.PC_ZARIGANI;
+      this.isStartGame  = true;
     });
     this.rankingButton = new Button(this, Constants.width - 80, 20, 'Rank', () => {
       this.scene.start('RankingScene');
     });
     // レベル表示のテキストオブジェクトを配置しておく
-    this.selectedLevel = this.add.text(Constants.width / 2, Constants.statusBarTextY, 'Level', { color: '#fff', fontSize: 30, fontFamily: 'sans-serif', align: 'center' }).setOrigin(0.5, 0);
+    this.selectedLevel = this.add.text(Constants.width / 2, Constants.statusBarTextY, 'Level', { color: '#fff', fontSize: 30, fontFamily: 'sans-serif', align: 'center' }).setOrigin(.5, 0);
     this.selectedLevel.depth = 2500;
     
     this.hpObject = new HpObject(this);        // HP 表示
     this.scoreObject = new ScoreObject(this);  // スコア表示
     this.itemsObject = new ItemsObject(this);  // アイテム群
     this.player = new PlayerObject(this, 50, Constants.fieldHeight / 2);  // プレイヤーを用意する
+    this.highScoreObject = new HighScoreObject(this);  // ハイスコア登録ダイアログを用意しておく (コンストラクタ時点では非表示)
     
     // プレイヤーをカーソルに追従させる処理
     this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => this.player.onPointerMove(pointer, this.hpObject.hp));
@@ -127,9 +135,9 @@ export default class MainScene extends Phaser.Scene {
         this.startButtonHard.text.setVisible(false);
         this.startButtonZarigani.text.setVisible(false);
         this.rankingButton.text.setVisible(false);
-        this.selectedLevel.setText(States.gameLevel);
+        this.selectedLevel.setText(States.gameLevel);  // 難易度名
         
-        this.sound.play(`sound-${MainScene.keyNameGameStart}`, { volume: 0.5 });
+        this.sound.play(`sound-${MainScene.keyNameGameStart}`, { volume: .5 });
         States.gameState = GameState.PLAY;
       }
     }
@@ -146,14 +154,12 @@ export default class MainScene extends Phaser.Scene {
           this.scoreObject.removeTimerEvent();  // スコアタイマーを停止する
           this.itemsObject.removeTimerEvent();  // アイテムを止める
           
-          this.message.setVisible(true).depth = 1000;  // 各種ボタンを再表示にし最前面に配置する
-          this.startButtonEasy.text.setVisible(true).depth = 1000;
-          this.startButtonHard.text.setVisible(true).depth = 1000;
-          this.startButtonZarigani.text.setVisible(true).depth = 1000;
-          this.rankingButton.text.setVisible(true).depth = 1000;
-          
-          this.sound.play(`sound-${MainScene.keyNameGameOver}`, { volume: 0.5 });
+          this.sound.play(`sound-${MainScene.keyNameGameOver}`, { volume: .5 });
           States.gameState = GameState.GAME_OVER;
+          
+          // ハイスコアかどうかチェックする → ハイスコアなら名前入力 → 登録ボタンを用意する (名無しでの登録も可能とする) → ゲームオーバー表示に切り替える
+          // ハイスコアでなければ直接ゲームオーバー表示に切り替える
+          this.showGameOver();
         }
       }
       else {
@@ -170,5 +176,49 @@ export default class MainScene extends Phaser.Scene {
     this.hpObject.updateHp(Math.max(this.hpObject.hp + item.point, 0));  // HP を回復 or 減少させる (負数にならないようにする)
     
     if(item.keyName === ItemObject.keyNameBomb) player.setY(PlayerObject.playerMaxY);  // 爆弾を取った時に地面にぶつける = HP を減少させたことと合わせて即死にする
+  }
+  
+  /** ゲームオーバー時のスコア判定・各種表示を行う */
+  private showGameOver() {
+    const score      = this.scoreObject.score;
+    const gameDevice = States.gameDevice;
+    const gameLevel  = States.gameLevel;
+    const stateName  = getStateNameFromGameLevel(gameLevel);
+    fetchRanking()
+      .then(() => {
+        const ranking = (States as any)[stateName] as Array<Ranking>;
+        ranking.push({ id: Number.POSITIVE_INFINITY, device: gameDevice as any, level: gameLevel as any, score, name: '' });  // ダミーで今回のスコアを登録する
+        // スコアの高い順・スコア同率の場合は `id` の大きい順のランキングに変換する
+        ranking.sort((rankingA, rankingB) => {
+          if(rankingA.score > rankingB.score) return -1;
+          if(rankingA.score < rankingB.score) return  1;
+          if(rankingA.id    > rankingB.id   ) return -1;
+          if(rankingA.id    < rankingB.id   ) return  1;
+          return 0;
+        });
+        const rankIndex = ranking.findIndex(rankingItem => rankingItem.id === Number.POSITIVE_INFINITY && rankingItem.score === score);
+        if(rankIndex < 5) {  // ランキング入賞
+          const deleteId = ranking[5].id;
+          console.log('[MainScene#showGameOver()] Ranked In, Show Ranked In Dialog', { score, gameLevel, stateName, ranking, rankIndex });
+          this.highScoreObject.show(rankIndex + 1, score, deleteId);
+        }
+        else {  // ランキング外のためゲームオーバー表示して終了する
+          console.log('[MainScene#showGameOver()] Not Ranked, Show Default Game Over Dialog', { score, gameLevel, stateName, ranking, rankIndex });
+          this.showDefaultGameOverDialog();
+        }
+      })
+      .catch(error => {
+        console.error('[MainScene#showGameOver()] Failed To Fetch Ranking, Show Default Game Over Dialog', error);
+        this.showDefaultGameOverDialog();
+      });
+  }
+  
+  /** ゲームオーバー時の表示 : 各種ボタンを再表示にし最前面に配置する */
+  public showDefaultGameOverDialog(): void {
+    this.message.setVisible(true).depth = 1000;
+    this.startButtonEasy.text.setVisible(true).depth = 1000;
+    this.startButtonHard.text.setVisible(true).depth = 1000;
+    this.startButtonZarigani.text.setVisible(true).depth = 1000;
+    this.rankingButton.text.setVisible(true).depth = 1000;
   }
 }

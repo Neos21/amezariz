@@ -34,7 +34,7 @@ export default class PlayerObject extends Phaser.Physics.Arcade.Sprite {
         targets: this,
         x: pointer.x,
         y: Math.min(pointer.y, PlayerObject.playerMaxY),
-        duration: States.gameLevel === GameLevel.EASY ? 200 : 400,  // カーソルへの追従速度
+        duration: States.gameLevel === GameLevel.PC_EASY ? 200 : 400,  // カーソルへの追従速度
         ease: 'Sine.easeOut'
       });
     }

@@ -41,14 +41,14 @@ export default class ItemsObject {
     // アイテムを追加し始める
     this.itemsTimerEvent = this.scene.time.addEvent({
       loop: true,   // `repeat: 0` で1回だけ実行される
-      delay: selectedLevel === GameLevel.HARD ? 500 : selectedLevel === GameLevel.ZARIGANI ? 250 : 800,  // アイテム追加の頻度を決めるループタイミング
+      delay: selectedLevel === GameLevel.PC_HARD ? 500 : selectedLevel === GameLevel.PC_ZARIGANI ? 250 : 800,  // アイテム追加の頻度を決めるループタイミング
       callback: () => {
         // アイテム・敵ごとに出現率を調整して出現させる
         
         // アイテム
         const isAddItem = (() => {
           const value = Phaser.Math.Between(0, 10);
-          if(selectedLevel === GameLevel.ZARIGANI) return value > 5;  // `zarigani` モードでは少なめ
+          if(selectedLevel === GameLevel.PC_ZARIGANI) return value > 5;  // `zarigani` モードでは少なめ
           return value > 1;  // `easy`・`hard` 時の割合
         })();
         if(isAddItem) {
@@ -65,7 +65,7 @@ export default class ItemsObject {
         // 敵
         const isAddEnemy = (() => {
           const value = Phaser.Math.Between(0, 10);
-          if(selectedLevel === GameLevel.EASY || selectedLevel === GameLevel.HARD) return value > 2;
+          if(selectedLevel === GameLevel.PC_EASY || selectedLevel === GameLevel.PC_HARD) return value > 2;
           return value > 1;  // `zarigani` モードはさらに出やすく
         })();
         if(isAddEnemy) this.items.add(new ItemObject(this.scene, this.screenLeftX, Phaser.Math.Between(this.minY, this.maxY), Phaser.Math.Between(1000, 600), ItemObject.keyNameEnemy));

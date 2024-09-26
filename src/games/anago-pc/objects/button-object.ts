@@ -12,7 +12,7 @@ export default class Button extends Phaser.GameObjects.Container {
     
     this.text = this.scene.add.text(x, y, text, { color: '#08f', fontSize: 30, fontFamily: 'sans-serif', backgroundColor: '#f6f6f6', align: 'center' })
       .setPadding(20, 10, 20, 10)
-      .setOrigin(0.5, 0)
+      .setOrigin(.5, 0)
       .setInteractive({ useHandCursor: true })  // インタラクティブ対応する・マウスポインタにする
       .on('pointerover', () => {  // ポインタが重なった時
         this.text.setColor('#f09');

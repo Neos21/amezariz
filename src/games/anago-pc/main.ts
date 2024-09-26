@@ -26,6 +26,9 @@ const config: Phaser.Types.Core.GameConfig = {
       debug: false  // `true` にするとデバッグ用の枠が出る
     }
   },
+  dom: {
+    createContainer: true  // テキストボックス表示のために必要
+  },
   scene: [MainScene, RankingScene]
 };
 

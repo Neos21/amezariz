@@ -28,7 +28,8 @@
   },
   "dependencies": {
     "@netlify/functions": "2.8.1",
-    "phaser": "3.85.2"
+    "phaser": "3.85.2",
+    "phaser3-rex-plugins": "1.80.7"
   },
   "devDependencies": {
     "@types/node": "22.7.0",
