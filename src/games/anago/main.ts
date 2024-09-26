@@ -1,11 +1,17 @@
 import Phaser from 'phaser';
 
-import Constants from './constants';
+import Constants, { fitToNarrowScreen } from './constants';
 import MainScene from './scenes/main-scene';
 import RankingScene from './scenes/ranking-scene';
 
-// TODO: スマホ用にサイズなどを変更したい場合はココで定数を差し替えてからゲームを起動する (type="module" なので DOMContentLoaded タイミングで実行される)
-//if(window.innerWidth < 600) Constants.width = 300;
+// スマホ用にサイズを変更したい場合はココで定数を差し替えてからゲームを起動する (type="module" なので DOMContentLoaded タイミングで実行される)
+if(window.innerWidth < 960) {
+  fitToNarrowScreen();
+  console.log('Main : SP Mode', window.innerWidth, Constants);
+}
+else {
+  console.log('Main : PC Mode', window.innerWidth, Constants);
+}
 
 /** ゲーム設定 */
 const config: Phaser.Types.Core.GameConfig = {

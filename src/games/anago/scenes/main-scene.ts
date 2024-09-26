@@ -25,6 +25,8 @@ export default class MainScene extends Phaser.Scene {
   
   /** メッセージ */
   private message!: Phaser.GameObjects.Text;
+  /** スタートボタン (SP Normal レベル) */
+  private startButtonNormal!: Button;
   /** スタートボタン (Easy レベル) */
   private startButtonEasy!: Button;
   /** スタートボタン (Hard レベル) */
@@ -83,25 +85,39 @@ export default class MainScene extends Phaser.Scene {
     this.message = this.add.text(Constants.width / 2, Constants.fieldHeight / 2 - 90, 'レベルを選択してスタート', { color: '#f09', fontSize: 30, fontFamily: 'sans-serif', backgroundColor: '#f6f6f6', align: 'center' })
       .setPadding(10, 10, 10, 10)
       .setOrigin(.5, 0);
-    // レベル別スタートボタンを配置する
-    this.startButtonEasy = new Button(this, Constants.width / 4, Constants.fieldHeight / 2 + 30, 'Easy', () => {
-      States.gameDevice = GameDevice.PC;
-      States.gameLevel  = GameLevel.PC_EASY;
-      this.isStartGame  = true;
-    });
-    this.startButtonHard = new Button(this, Constants.width / 4 * 2, Constants.fieldHeight / 2 + 30, 'Hard', () => {
-      States.gameDevice = GameDevice.PC;
-      States.gameLevel  = GameLevel.PC_HARD;
-      this.isStartGame  = true;
-    });
-    this.startButtonZarigani = new Button(this, Constants.width / 4 * 3, Constants.fieldHeight / 2 + 30, 'Zarigani', () => {
-      States.gameDevice = GameDevice.PC;
-      States.gameLevel  = GameLevel.PC_ZARIGANI;
-      this.isStartGame  = true;
-    });
+    
+    if(Constants.isSpMode) {
+      this.message.text = 'ボタンをタップしてスタート';
+      this.startButtonNormal = new Button(this, Constants.width / 2, Constants.fieldHeight / 2 + 30, 'Normal', () => {
+        States.gameDevice = GameDevice.SP;
+        States.gameLevel  = GameLevel.SP;
+        this.isStartGame  = true;
+      });
+    }
+    else {
+      // レベル別スタートボタンを配置する
+      this.startButtonEasy = new Button(this, Constants.width / 4, Constants.fieldHeight / 2 + 30, 'Easy', () => {
+        States.gameDevice = GameDevice.PC;
+        States.gameLevel  = GameLevel.PC_EASY;
+        this.isStartGame  = true;
+      });
+      this.startButtonHard = new Button(this, Constants.width / 4 * 2, Constants.fieldHeight / 2 + 30, 'Hard', () => {
+        States.gameDevice = GameDevice.PC;
+        States.gameLevel  = GameLevel.PC_HARD;
+        this.isStartGame  = true;
+      });
+      this.startButtonZarigani = new Button(this, Constants.width / 4 * 3, Constants.fieldHeight / 2 + 30, 'Zarigani', () => {
+        States.gameDevice = GameDevice.PC;
+        States.gameLevel  = GameLevel.PC_ZARIGANI;
+        this.isStartGame  = true;
+      });
+    }
+    
+    // ランキング画面へ遷移するボタン
     this.rankingButton = new Button(this, Constants.width - 80, 20, 'Rank', () => {
       this.scene.start('RankingScene');
     });
+    
     // レベル表示のテキストオブジェクトを配置しておく
     this.selectedLevel = this.add.text(Constants.width / 2, Constants.statusBarTextY, 'Level', { color: '#fff', fontSize: 30, fontFamily: 'sans-serif', align: 'center' }).setOrigin(.5, 0);
     this.selectedLevel.depth = 2500;
@@ -131,9 +147,15 @@ export default class MainScene extends Phaser.Scene {
         this.itemsObject.createTimerEvent();  // アイテム群の初期化・タイマー処理を開始する
         
         this.message.setVisible(false).setText('Game Over\nレベルを選択してリトライ');  // 各種ボタンを非表示にする
-        this.startButtonEasy.text.setVisible(false);
-        this.startButtonHard.text.setVisible(false);
-        this.startButtonZarigani.text.setVisible(false);
+        if(Constants.isSpMode) {
+          this.message.text = 'Game Over\nボタンをタップしてリトライ';
+          this.startButtonNormal.text.setVisible(false);
+        }
+        else {
+          this.startButtonEasy.text.setVisible(false);
+          this.startButtonHard.text.setVisible(false);
+          this.startButtonZarigani.text.setVisible(false);
+        }
         this.rankingButton.text.setVisible(false);
         this.selectedLevel.setText(States.gameLevel);  // 難易度名
         
@@ -148,7 +170,7 @@ export default class MainScene extends Phaser.Scene {
         this.player.setVelocityY(50);  // 直前までの Tween による挙動は残した方が面白そう・プレイヤー落下開始
         
         // プレイヤーが地面に付いたらゲームオーバー
-        if(this.player.y >= PlayerObject.playerMaxY) {
+        if(this.player.y >= this.player.playerMaxY) {
           this.player.setVelocityY(0);          // プレイヤーを止める
           this.hpObject.removeTimerEvent();     // HP タイマーを停止する
           this.scoreObject.removeTimerEvent();  // スコアタイマーを停止する
@@ -175,7 +197,7 @@ export default class MainScene extends Phaser.Scene {
     this.itemsObject.items.remove(item, true, true);  // アイテムを消す
     this.hpObject.updateHp(Math.max(this.hpObject.hp + item.point, 0));  // HP を回復 or 減少させる (負数にならないようにする)
     
-    if(item.keyName === ItemObject.keyNameBomb) player.setY(PlayerObject.playerMaxY);  // 爆弾を取った時に地面にぶつける = HP を減少させたことと合わせて即死にする
+    if(item.keyName === ItemObject.keyNameBomb) player.setY(player.playerMaxY);  // 爆弾を取った時に地面にぶつける = HP を減少させたことと合わせて即死にする
   }
   
   /** ゲームオーバー時のスコア判定・各種表示を行う */
@@ -216,9 +238,14 @@ export default class MainScene extends Phaser.Scene {
   /** ゲームオーバー時の表示 : 各種ボタンを再表示にし最前面に配置する */
   public showDefaultGameOverDialog(): void {
     this.message.setVisible(true).depth = 1000;
-    this.startButtonEasy.text.setVisible(true).depth = 1000;
-    this.startButtonHard.text.setVisible(true).depth = 1000;
-    this.startButtonZarigani.text.setVisible(true).depth = 1000;
+    if(Constants.isSpMode) {
+      this.startButtonNormal.text.setVisible(true).depth = 1000;
+    }
+    else {
+      this.startButtonEasy.text.setVisible(true).depth = 1000;
+      this.startButtonHard.text.setVisible(true).depth = 1000;
+      this.startButtonZarigani.text.setVisible(true).depth = 1000;
+    }
     this.rankingButton.text.setVisible(true).depth = 1000;
   }
 }

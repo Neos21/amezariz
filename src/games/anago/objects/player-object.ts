@@ -10,7 +10,7 @@ export default class PlayerObject extends Phaser.Physics.Arcade.Sprite {
   public static readonly keyName: string = 'player';
   
   /** ステータスバーに対して Collision が効かないためステータスバーとプレイヤーのサイズからカーソルの最高到達範囲を調節する */
-  public static readonly playerMaxY: number = Constants.fieldHeight - (Constants.playerHeight / 2);
+  public playerMaxY: number;
   
   /** コンストラクタ */
   constructor(scene: Phaser.Scene, x: number, y: number) {
@@ -23,6 +23,9 @@ export default class PlayerObject extends Phaser.Physics.Arcade.Sprite {
     this.setTint(0xe6e6e6);            // デフォルトは少し暗めにしておく
     this.setOffset(9, 1);              // 当たり判定を調整する
     this.setBodySize(Constants.playerWidth, Constants.playerHeight, false);   // 当たり判定を調整する
+    
+    // コンストラクタ時点で再計算させることで SP モードに対応させる
+    this.playerMaxY = Constants.fieldHeight - (Constants.playerHeight / 2);
   }
   
   /** プレイヤーをマウスに追従させる */
@@ -33,8 +36,8 @@ export default class PlayerObject extends Phaser.Physics.Arcade.Sprite {
       this.scene.tweens.add({
         targets: this,
         x: pointer.x,
-        y: Math.min(pointer.y, PlayerObject.playerMaxY),
-        duration: States.gameLevel === GameLevel.PC_EASY ? 200 : 400,  // カーソルへの追従速度
+        y: Math.min(pointer.y, this.playerMaxY),
+        duration: States.gameLevel === GameLevel.PC_EASY ? 200 : States.gameLevel === GameLevel.SP ? 300 : 400,  // カーソルへの追従速度
         ease: 'Sine.easeOut'
       });
     }

@@ -15,7 +15,19 @@ const Constants = {
   
   // アイテム・敵のサイズ
   itemWidth : 50,
-  itemHeight: 50
+  itemHeight: 50,
+  
+  // スマホモードか否か
+  isSpMode: false
 };
+
+/** 画面幅が小さい時用の Constants に変更する */
+export function fitToNarrowScreen() {
+  Constants.width  = 700;
+  Constants.height = 340;
+  Constants.fieldHeight    = 290;
+  Constants.statusBarTextY = 298;
+  Constants.isSpMode = true;
+}
 
 export default Constants;

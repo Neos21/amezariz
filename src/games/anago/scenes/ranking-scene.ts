@@ -8,14 +8,15 @@ import Button from '../objects/button-object';
 /** ランキングシーン */
 export default class RankingScene extends Phaser.Scene {
   // 画面左から程良く間隔を開けて表示する
+  private readonly spX        : number = 230;
   private readonly pcEasyX    : number =  25;
   private readonly pcHardX    : number = 350;
   private readonly pcZariganiX: number = 675;
   
   // 画面上から程良く間隔を開けて表示する
-  private readonly levelNameY  : number = 120;
+  private levelNameY : number = 120;
+  private scoreHeight: number =  50;
   private readonly scorePadding: number = 250;
-  private readonly scoreHeight : number =  50;
   
   private readonly levelTitleStyle: Phaser.Types.GameObjects.Text.TextStyle = { color: '#fff', fontSize: 30, fontStyle: 'bold', fontFamily: 'sans-serif'                 };
   private readonly nameStyle      : Phaser.Types.GameObjects.Text.TextStyle = { color: '#fff', fontSize: 25,                    fontFamily: 'sans-serif', align: 'left' , fixedWidth: 150 };  // 名前がスコアに被らないように幅を指定しておく
@@ -23,6 +24,12 @@ export default class RankingScene extends Phaser.Scene {
   
   constructor() {
     super({ key: 'RankingScene', active: false });  // シーン定義・自動実行しない
+    
+    // SP モード用に定数を調整する
+    if(Constants.isSpMode) {
+      this.levelNameY  = 90;
+      this.scoreHeight = 37;
+    }
   }
   
   /** 初期化処理 */
@@ -50,9 +57,14 @@ export default class RankingScene extends Phaser.Scene {
   }
   
   private showRanking(): void {
-    this.showRankingColumn('pcEasyRanking'    , 'Easy'    , this.pcEasyX);
-    this.showRankingColumn('pcHardRanking'    , 'Hard'    , this.pcHardX);
-    this.showRankingColumn('pcZariganiRanking', 'Zarigani', this.pcZariganiX);
+    if(Constants.isSpMode) {
+      this.showRankingColumn('spRanking', 'Normal', this.spX);
+    }
+    else {
+      this.showRankingColumn('pcEasyRanking'    , 'Easy'    , this.pcEasyX);
+      this.showRankingColumn('pcHardRanking'    , 'Hard'    , this.pcHardX);
+      this.showRankingColumn('pcZariganiRanking', 'Zarigani', this.pcZariganiX);
+    }
   }
   
   private showRankingColumn(stateName: string, title: string, titleX: number): void {

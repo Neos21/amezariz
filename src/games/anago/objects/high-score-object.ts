@@ -27,7 +27,7 @@ export default class HighScoreObject extends Phaser.GameObjects.Container {
     this.scene = scene;
     
     // ダイアログ枠
-    this.dialogBox = this.scene.add.rectangle(Constants.width / 2, Constants.fieldHeight / 2, Constants.width / 2, Constants.height / 2, 0x0088ff).setOrigin(.5, .5);
+    this.dialogBox = this.scene.add.rectangle(Constants.width / 2, Constants.fieldHeight / 2, 480, 250, 0x0088ff).setOrigin(.5, .5);  // PC でも SP でも枠のサイズは同じにする
     this.dialogBox.depth = 3000;  // ベースの重なり度合いにする
     
     // メッセージ
