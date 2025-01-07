@@ -15,7 +15,7 @@ export default async (request: Request, _context: Context) => {
     const name = body.name == null || String(body.name).trim() === '' ? '名無し' : String(body.name).trim();
     
     // ランキングを登録する
-    const insertResponse = await fetch(`https://app.neos21.net/db-api/sqlite/run`, {
+    const insertResponse = await fetch(`https://app.neos21.net/api/db-api/sqlite/run`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -29,7 +29,7 @@ export default async (request: Request, _context: Context) => {
     if(insertJson.error) throw new Error(insertJson.error);
     
     // ランク外となった ID を削除する
-    const deleteResponse = await fetch(`https://app.neos21.net/db-api/sqlite/run`, {
+    const deleteResponse = await fetch(`https://app.neos21.net/api/db-api/sqlite/run`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
