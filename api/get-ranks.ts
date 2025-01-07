@@ -3,7 +3,7 @@ import { Context } from '@netlify/functions';
 /** ランキングを取得する */
 export default async (_request: Request, _context: Context) => {
   try {
-    const dbApiResponse = await fetch(`https://db-api.neos21.net/sqlite/all`, {
+    const dbApiResponse = await fetch(`https://app.neos21.net/db-api/sqlite/all`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
